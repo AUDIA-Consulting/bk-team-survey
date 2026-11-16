@@ -123,8 +123,11 @@
   .thanks.show { display: block; }
   .thanks p { max-width: 560px; }
   footer { color: var(--bk-muted); font-size: 13px; padding: 32px 0 56px; }
+  h1, h2, .promise p.title { text-wrap: balance; }
+  p, li, legend, label, .nps-ends span, footer, .alert, button { text-wrap: pretty; }
   .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 
+  @media (max-width: 380px) { h1 { font-size: 2.1rem; } }
   @media (max-width: 560px) {
     body { font-size: 16px; }
     header.hero { padding-top: 48px; }
@@ -211,6 +214,39 @@
   <p class="intro">Your anonymous response has been received. You can close this page now.</p>
 </section>
 <script>
+(function () {
+  /* Keep the last two words of each text block together so no word sits alone on the last line. */
+  var spots = [];
+  function find(el) {
+    var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null), nodes = [], n;
+    while ((n = walker.nextNode())) nodes.push(n);
+    var seenWord = false;
+    for (var i = nodes.length - 1; i >= 0; i--) {
+      var d = nodes[i].data;
+      if (!seenWord) {
+        d = d.replace(/\s+$/, '');
+        if (!d.length) continue;
+        var k = d.lastIndexOf(' ');
+        if (k === -1) { seenWord = true; continue; }
+        return spots.push({ el: el, node: nodes[i], at: k });
+      }
+      var k2 = d.lastIndexOf(' ');
+      if (k2 !== -1) return spots.push({ el: el, node: nodes[i], at: k2 });
+    }
+  }
+  function set(s, ch) { var d = s.node.data; s.node.data = d.slice(0, s.at) + ch + d.slice(s.at + 1); }
+  function apply() {
+    spots.forEach(function (s) {
+      set(s, '\u00a0');
+      if (s.el.scrollWidth > s.el.clientWidth + 1) set(s, ' ');
+    });
+  }
+  var els = document.querySelectorAll('h1, h2, .intro, .promise p.title, .promise li, legend, .item.open label, .note, footer, .thanks p');
+  for (var j = 0; j < els.length; j++) find(els[j]);
+  apply();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(apply);
+  var t; window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(apply, 150); });
+})();
 (function () {
   var form = document.getElementById('bk-form');
   var bar = document.getElementById('bar');
