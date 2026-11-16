@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Baker Katz Team Survey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bk-dark: #1a1a2e;
+    --bk-darker: #0f0f1e;
+    --bk-blue: #9fc5e8;
+    --bk-blue-bright: #d4eaff;
+    --bk-blue-dim: rgba(159,197,232,0.15);
+    --bk-gold: #c9a227;
+    --bk-gold-dim: rgba(201,162,39,0.12);
+    --bk-white: #f8f9fa;
+    --bk-text: #e0e0e0;
+    --bk-muted: #8a8a9a;
+    --bk-line: rgba(159,197,232,0.14);
+    --bk-error: #ff8a80;
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-serif: 'Instrument Serif', Georgia, serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: var(--font-sans); font-size: 17px; line-height: 1.65;
+    color: var(--bk-text); background: var(--bk-darker);
+  }
+  .progress { position: sticky; top: 0; z-index: 10; height: 4px; background: var(--bk-dark); }
+  .progress > span { display: block; height: 100%; width: 0; background: var(--bk-blue); transition: width .3s ease; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+
+  header.hero { position: relative; padding: 72px 0 40px; overflow: hidden; }
+  header.hero::before {
+    content: ""; position: absolute; inset: -40% -20% auto auto; width: 720px; height: 720px;
+    background: radial-gradient(circle, rgba(159,197,232,0.16) 0%, rgba(159,197,232,0) 65%);
+    pointer-events: none;
+  }
+  .brand { font-weight: 700; letter-spacing: .18em; font-size: 13px; color: var(--bk-white); }
+  .brand span { color: var(--bk-muted); font-weight: 500; letter-spacing: .14em; }
+  h1 { font-family: var(--font-serif); font-weight: 400; color: var(--bk-white);
+       font-size: clamp(2.5rem, 7vw, 4rem); line-height: 1.06; margin: 28px 0 18px; }
+  h1 em, h2 em { color: var(--bk-blue); }
+  .intro { color: var(--bk-text); max-width: 620px; }
+  .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 28px; }
+  .fact { border: 1px solid var(--bk-line); border-radius: 12px; padding: 14px 16px; background: var(--bk-dark); }
+  .fact b { display: block; font-family: var(--font-serif); font-weight: 400; font-size: 26px; color: var(--bk-gold); line-height: 1.1; }
+  .fact small { color: var(--bk-muted); font-size: 13px; }
+
+  .promise { margin: 28px 0 8px; border: 1px solid var(--bk-line); border-left: 3px solid var(--bk-blue);
+             background: var(--bk-blue-dim); border-radius: 12px; padding: 18px 20px; }
+  .promise p.title { font-weight: 600; color: var(--bk-white); margin-bottom: 6px; }
+  .promise ul { list-style: none; }
+  .promise li { padding-left: 22px; position: relative; font-size: 15px; margin: 4px 0; }
+  .promise li::before { content: ""; position: absolute; left: 4px; top: .68em; width: 7px; height: 7px; border-radius: 50%; background: var(--bk-blue); }
+
+  .block { padding: 44px 0 8px; border-top: 1px solid var(--bk-line); margin-top: 36px; }
+  .eyebrow { text-transform: uppercase; letter-spacing: .15em; font-size: 12px; font-weight: 600; color: var(--bk-blue); }
+  h2 { font-family: var(--font-serif); font-weight: 400; color: var(--bk-white);
+       font-size: clamp(1.8rem, 4.6vw, 2.5rem); line-height: 1.12; margin: 8px 0 22px; }
+  .note { color: var(--bk-muted); font-size: 15px; margin-bottom: 18px; }
+  .note.small { font-size: 13px; margin: 12px 0 0; }
+
+  fieldset.item, .item { border: 1px solid var(--bk-line); border-radius: 14px; background: var(--bk-dark);
+                          padding: 20px 20px 18px; margin: 0 0 14px; transition: border-color .2s ease; }
+  fieldset.item.missing, .item.open.missing { border-color: var(--bk-error); }
+  legend, .legend-like { float: left; width: 100%; color: var(--bk-white); font-weight: 500; margin-bottom: 16px; }
+  legend + *, .legend-like + * { clear: both; }
+  .opt, .nps, .pill { position: relative; }
+  .qnum { display: inline-block; min-width: 34px; color: var(--bk-gold); font-weight: 600; font-size: 14px; }
+
+  .scale { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .opt { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; text-align: center; }
+  .opt input, .nps input, .pill input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .dot { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
+         border: 1px solid rgba(159,197,232,0.35); color: var(--bk-text); font-weight: 600; font-size: 15px;
+         transition: all .2s ease; }
+  .opt:hover .dot { border-color: var(--bk-blue); background: var(--bk-blue-dim); }
+  .opt input:checked + .dot { background: var(--bk-blue); color: var(--bk-darker); border-color: var(--bk-blue); }
+  .opt input:focus-visible + .dot { outline: 2px solid var(--bk-blue-bright); outline-offset: 3px; }
+  .opt-label { font-size: 12px; line-height: 1.3; color: var(--bk-muted); }
+
+  .nps-row { display: grid; grid-template-columns: repeat(11, 1fr); gap: 6px; }
+  .nps span { display: grid; place-items: center; height: 44px; border-radius: 10px; cursor: pointer;
+              border: 1px solid rgba(159,197,232,0.35); font-weight: 600; font-size: 15px; transition: all .2s ease; }
+  .nps:hover span { border-color: var(--bk-blue); background: var(--bk-blue-dim); }
+  .nps input:checked + span { background: var(--bk-gold); border-color: var(--bk-gold); color: var(--bk-darker); }
+  .nps input:focus-visible + span { outline: 2px solid var(--bk-blue-bright); outline-offset: 2px; }
+  .nps-ends { display: flex; justify-content: space-between; color: var(--bk-muted); font-size: 12px; margin-top: 10px; gap: 12px; }
+
+  .item.open label { display: block; color: var(--bk-white); font-weight: 500; margin-bottom: 12px; }
+  .optional { font-size: 12px; color: var(--bk-muted); font-weight: 400; margin-left: 6px; }
+  textarea { width: 100%; resize: vertical; min-height: 110px; padding: 14px; border-radius: 10px;
+             font: inherit; font-size: 16px; color: var(--bk-white); background: var(--bk-darker);
+             border: 1px solid rgba(159,197,232,0.25); }
+  textarea:focus { outline: none; border-color: var(--bk-blue); box-shadow: 0 0 0 3px var(--bk-blue-dim); }
+
+  .pills { display: flex; flex-wrap: wrap; gap: 10px; min-width: 0; }
+  .pill span { display: inline-block; padding: 10px 16px; border-radius: 999px; cursor: pointer; font-size: 15px;
+               border: 1px solid rgba(159,197,232,0.35); transition: all .2s ease; }
+  .pill:hover span { border-color: var(--bk-blue); background: var(--bk-blue-dim); }
+  .pill input:checked + span { background: var(--bk-blue); color: var(--bk-darker); border-color: var(--bk-blue); }
+  .pill input:focus-visible + span { outline: 2px solid var(--bk-blue-bright); outline-offset: 2px; }
+
+  .submit-row { padding: 36px 0 24px; border-top: 1px solid var(--bk-line); margin-top: 36px; }
+  .alert { display: none; border-radius: 12px; padding: 14px 18px; margin-bottom: 18px; font-size: 15px; }
+  .alert.show { display: block; }
+  .alert.err { background: rgba(255,138,128,0.1); border: 1px solid var(--bk-error); color: #ffd2cc; }
+  .alert.warn { background: var(--bk-gold-dim); border: 1px solid var(--bk-gold); color: #f3e4b0; }
+  button { font: inherit; font-weight: 600; font-size: 16px; color: var(--bk-darker); background: var(--bk-blue);
+           border: 0; border-radius: 999px; padding: 15px 34px; cursor: pointer; transition: background .2s ease, transform .2s ease; }
+  button:hover { background: var(--bk-blue-bright); transform: translateY(-1px); }
+  button:disabled { opacity: .6; cursor: wait; transform: none; }
+  .count { color: var(--bk-muted); font-size: 14px; margin-left: 14px; }
+
+  .thanks { display: none; padding: 96px 0 120px; text-align: left; }
+  .thanks.show { display: block; }
+  .thanks p { max-width: 560px; }
+  footer { color: var(--bk-muted); font-size: 13px; padding: 32px 0 56px; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+  @media (max-width: 560px) {
+    body { font-size: 16px; }
+    header.hero { padding-top: 48px; }
+    .facts { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .fact { padding: 12px; }
+    .fact b { font-size: 22px; }
+    fieldset.item, .item { padding: 16px 14px; }
+    .dot { width: 40px; height: 40px; }
+    .opt-label { font-size: 11px; }
+    .scale .opt:nth-child(2) .opt-label,
+    .scale .opt:nth-child(3) .opt-label,
+    .scale .opt:nth-child(4) .opt-label { visibility: hidden; }
+    .nps-row { grid-template-columns: repeat(6, 1fr); }
+    button { width: 100%; }
+    .count { display: block; margin: 12px 0 0; }
+  }
+</style>
+</head>
+<body>
+<div class="progress" aria-hidden="true" style="display:none"><span id="bar"></span></div>
+
+<main class="wrap" id="survey">
+  <header class="hero">
+    <p class="brand">BAKER KATZ <span>&nbsp;·&nbsp; TEAM SURVEY</span></p>
+    <h1>Three questions. <em>Completely</em> anonymous.</h1>
+    <p class="intro">This survey is anonymous. Your name is not attached to your answers, and results are reported only as group totals. Please answer honestly. Your feedback helps make Baker Katz a better place to work.</p>
+    <div class="promise">
+      <p class="title">How your anonymity is protected</p>
+      <ul>
+        <li>The survey does not ask for your name or email, and the link is the same for everyone.</li>
+        <li>AUDIA Consulting administers the survey as an independent third party. Baker Katz never sees individual responses.</li>
+        <li>Results are reported only as group totals, and written comments only as themes.</li>
+        <li>This page saves nothing on your device.</li>
+      </ul>
+    </div>
+  </header>
+
+  <form id="bk-form" action="https://formspree.io/f/xrppwnrg" method="POST" novalidate>
+    <input type="hidden" name="survey_id" value="BK-meNPS-2026-11">
+    <input type="hidden" name="_subject" value="Baker Katz meNPS Survey response">
+    <div class="hp" aria-hidden="true"><label>Leave this empty<input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label></div>
+
+    <section class="block">
+      <p class="eyebrow">Question 1 of 3</p>
+      <h2>The <em>recommend</em> question.</h2>
+      <fieldset class="item" data-q="Q1_recommend">
+        <legend><span class="qnum">01</span>On a scale of 0 to 10, how likely are you to recommend Baker Katz as a place to work to a friend?</legend>
+        <div class="nps-row"><label class="nps"><input type="radio" name="Q1_recommend" value="0" required><span>0</span></label><label class="nps"><input type="radio" name="Q1_recommend" value="1" required><span>1</span></label><label class="nps"><input type="radio" name="Q1_recommend" value="2" required><span>2</span></label><label class="nps"><input type="radio" name="Q1_recommend" value="3" required><span>3</span></label><label class="nps"><input type="radio" name="Q1_recommend" value="4" required><span>4</span></label><label class="nps"><input type="radio" name="Q1_recommend" value="5" required><span>5</span></label><label class="nps"><input type="radio" name="Q1_recommend" value="6" required><span>6</span></label><label class="nps"><input type="radio" name="Q1_recommend" value="7" required><span>7</span></label><label class="nps"><input type="radio" name="Q1_recommend" value="8" required><span>8</span></label><label class="nps"><input type="radio" name="Q1_recommend" value="9" required><span>9</span></label><label class="nps"><input type="radio" name="Q1_recommend" value="10" required><span>10</span></label></div>
+        <div class="nps-ends"><span>0 = Not at all likely</span><span>10 = Extremely likely</span></div>
+      </fieldset>
+    </section>
+
+    <section class="block">
+      <p class="eyebrow">Question 2 of 3</p>
+      <h2>The <em>reason.</em></h2>
+      <div class="item open">
+        <label for="Q2_reason"><span class="qnum">02</span>What is the primary reason for your score?</label>
+        <textarea id="Q2_reason" name="Q2_reason" rows="5" maxlength="3000" required aria-required="true"></textarea>
+      </div>
+    </section>
+
+    <section class="block">
+      <p class="eyebrow">Question 3 of 3</p>
+      <h2>The <em>one thing.</em></h2>
+      <div class="item open">
+        <label for="Q3_one_thing"><span class="qnum">03</span>What is the one thing Baker Katz could do to make this a better place to work?</label>
+        <textarea id="Q3_one_thing" name="Q3_one_thing" rows="5" maxlength="3000" required aria-required="true"></textarea>
+      </div>
+      <p class="note">Please describe situations, not people. Leave out names or details that would point to you or someone else.</p>
+    </section>
+
+    <div class="submit-row">
+      <div class="alert err" id="err" role="alert"></div>
+      <div class="alert warn" id="warn" role="status"></div>
+      <button type="submit" id="send">Submit my anonymous response</button>
+    </div>
+  </form>
+  <footer>Administered by AUDIA Consulting on behalf of Baker Katz. Questions about this survey: maudia@goAUDIA.com</footer>
+</main>
+
+<section class="wrap thanks" id="thanks" aria-live="polite">
+  <p class="brand">BAKER KATZ <span>&nbsp;·&nbsp; TEAM SURVEY</span></p>
+  <h1>Thank <em>you.</em></h1>
+  <p class="intro">Your anonymous response has been received. You can close this page now.</p>
+</section>
+<script>
+(function () {
+  var form = document.getElementById('bk-form');
+  var bar = document.getElementById('bar');
+    var err = document.getElementById('err');
+  var warn = document.getElementById('warn');
+  var btn = document.getElementById('send');
+  var groups = Array.prototype.slice.call(form.querySelectorAll('fieldset.item'));
+  var total = groups.length;
+
+  function answered(fs) { return !!fs.querySelector('input[type=radio]:checked'); }
+
+  function update() {
+    var done = groups.filter(answered).length;
+    bar.style.width = (done / total * 100) + '%';
+  }
+
+  var boxes = Array.prototype.slice.call(form.querySelectorAll('textarea[required]'));
+  function filled(ta) { return ta.value.trim().length > 0; }
+
+  form.addEventListener('change', function (e) {
+    var fs = e.target.closest('fieldset.item');
+    if (fs && answered(fs)) fs.classList.remove('missing');
+    update();
+  });
+  form.addEventListener('input', function (e) {
+    if (e.target.tagName === 'TEXTAREA' && filled(e.target)) e.target.closest('.item').classList.remove('missing');
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    err.classList.remove('show'); warn.classList.remove('show');
+
+    var missing = [];
+    groups.forEach(function (fs) { var bad = !answered(fs); fs.classList.toggle('missing', bad); if (bad) missing.push(fs); });
+    boxes.forEach(function (ta) { var item = ta.closest('.item'); var bad = !filled(ta); item.classList.toggle('missing', bad); if (bad) missing.push(item); });
+    if (missing.length) {
+      err.textContent = missing.length === 1
+        ? 'Please answer all three questions. One question still needs an answer. It is outlined in red above.'
+        : 'Please answer all three questions. ' + missing.length + ' questions still need an answer. They are outlined in red above.';
+      err.classList.add('show');
+      missing[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    if (form.action.indexOf('YOUR_FORM_ID') !== -1) {
+      warn.textContent = 'Setup check: this form is not connected to Formspree yet. Replace YOUR_FORM_ID in the page with the real form ID before sending the link to employees.';
+      warn.classList.add('show');
+      return;
+    }
+
+    btn.disabled = true; btn.textContent = 'Sending...';
+    fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } })
+      .then(function (r) {
+        if (!r.ok) throw new Error('status ' + r.status);
+        form.reset();
+        document.getElementById('survey').style.display = 'none';
+        document.getElementById('thanks').classList.add('show');
+        bar.style.width = '100%';
+        window.scrollTo(0, 0);
+      })
+      .catch(function () {
+        btn.disabled = false; btn.textContent = 'Submit my anonymous response';
+        err.textContent = 'Something went wrong and your response was not sent. Please check your connection and try again.';
+        err.classList.add('show');
+      });
+  });
+
+  update();
+})();
+</script>
+</body>
+</html>
